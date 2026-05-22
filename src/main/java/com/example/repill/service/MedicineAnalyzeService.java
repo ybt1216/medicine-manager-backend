@@ -2,6 +2,8 @@ package com.example.repill.service;
 
 import com.example.repill.dto.AiExtractResult;
 import com.example.repill.dto.MedicineAnalyzeResponse;
+import com.example.repill.entity.MedicineRecord;
+import com.example.repill.repository.MedicineRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,46 +11,60 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class
-        MedicineAnalyzeService {
+public class MedicineAnalyzeService {
 
     private final OpenAiVisionService openAiVisionService;
+    private final MedicineRecordRepository medicineRecordRepository;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
     public MedicineAnalyzeResponse analyze(MultipartFile image) {
         try {
-            // 1. 업로드 폴더 생성
-            Path dirPath = Path.of(uploadDir);
-            Files.createDirectories(dirPath);
+            if (image == null || image.isEmpty()) {
+                throw new RuntimeException("이미지 파일이 비어 있습니다.");
+            }
 
-            // 2. 파일 이름 안전 처리
+            Path uploadPath = Path.of(uploadDir).toAbsolutePath().normalize();
+            Files.createDirectories(uploadPath);
+
             String originalFilename = image.getOriginalFilename();
-            if (originalFilename == null || originalFilename.isEmpty()) {
-                throw new RuntimeException("파일 이름이 없습니다.");
-            }
-
             String extension = getExtension(originalFilename);
-            if (extension == null || extension.isEmpty()) {
-                extension = "jpg"; // 기본값
-            }
-
             String savedFilename = UUID.randomUUID() + "." + extension;
 
-            // 3. 파일 저장
-            Path savedPath = dirPath.resolve(savedFilename);
-            image.transferTo(savedPath.toFile());
+            Path savedPath = uploadPath.resolve(savedFilename);
 
-            // 4. OpenAI 분석
+            Files.copy(
+                    image.getInputStream(),
+                    savedPath,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
             AiExtractResult aiResult = openAiVisionService.analyzeImage(savedPath.toFile());
 
-            // 5. 응답
+            MedicineRecord record = new MedicineRecord();
+            record.setImagePath(savedPath.toString());
+            record.setVisibleText(joinList(aiResult.getVisibleText()));
+            record.setImprint(aiResult.getImprint());
+            record.setColor(aiResult.getColor());
+            record.setShape(aiResult.getShape());
+            record.setDosageForm(aiResult.getDosageForm());
+            record.setHasScoreLine(aiResult.getHasScoreLine());
+            record.setPackageText(joinList(aiResult.getPackageText()));
+            record.setExpirationDate(aiResult.getExpirationDate());
+            record.setConfidence(aiResult.getConfidence());
+            record.setCaution(aiResult.getCaution());
+
+            MedicineRecord savedRecord = medicineRecordRepository.save(record);
+
             return MedicineAnalyzeResponse.builder()
+                    .recordId(savedRecord.getId())
                     .message("analysis completed")
                     .imagePath(savedPath.toString())
                     .aiResult(aiResult)
@@ -56,8 +72,8 @@ public class
                     .build();
 
         } catch (Exception e) {
-            e.printStackTrace(); // 디버깅용
-            throw new RuntimeException("약 이미지 분석 중 오류가 발생했습니다.", e);
+            e.printStackTrace();
+            throw new RuntimeException("약 이미지 분석 중 오류가 발생했습니다: " + e.getMessage(), e);
         }
     }
 
@@ -66,5 +82,12 @@ public class
             return "jpg";
         }
         return filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+    }
+
+    private String joinList(List<String> list) {
+        if (list == null || list.isEmpty()) {
+            return "";
+        }
+        return String.join(", ", list);
     }
 }
