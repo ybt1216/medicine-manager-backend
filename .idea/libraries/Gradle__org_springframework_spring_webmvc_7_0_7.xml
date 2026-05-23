@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework:spring-webmvc:7.0.7" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework" artifactId="spring-webmvc" version="7.0.7" baseVersion="7.0.7" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/7.0.7/5d7758ed288cda1eacae4b96defb9eed3a7e561d/spring-webmvc-7.0.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/7.0.7/4e4ee7c91fc84e7e4026cb1612699ac5404fbc4c/spring-webmvc-7.0.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/7.0.7/4c14a5715dfeb761b1ab41ba3ccfed5d9fd21965/spring-webmvc-7.0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

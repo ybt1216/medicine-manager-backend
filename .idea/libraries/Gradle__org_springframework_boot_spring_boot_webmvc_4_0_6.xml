@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-webmvc:4.0.6" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-webmvc" version="4.0.6" baseVersion="4.0.6" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.6/2a5877540d8f8bd4df5071d1848fc0a30384117b/spring-boot-webmvc-4.0.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.6/caacb7fc5d4ed6d166365f15d699d986e7c9a984/spring-boot-webmvc-4.0.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.6/ce6324b964b1e5d58c4dee1534af14b9f2de6a4e/spring-boot-webmvc-4.0.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

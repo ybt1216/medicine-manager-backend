@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-resttestclient:4.0.6" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-resttestclient" version="4.0.6" baseVersion="4.0.6" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-resttestclient/4.0.6/a7322a8d37500e92549200d44d76a54e6297f51e/spring-boot-resttestclient-4.0.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-resttestclient/4.0.6/1137b09bde2d4a4c498100cd22448037c3ec1779/spring-boot-resttestclient-4.0.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-resttestclient/4.0.6/e39b64c665eff350e2171a2e3c42b15ee64fb67c/spring-boot-resttestclient-4.0.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

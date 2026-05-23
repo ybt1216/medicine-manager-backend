@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework:spring-test:7.0.7" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework" artifactId="spring-test" version="7.0.7" baseVersion="7.0.7" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/7.0.7/58c34299b8a881978743a7b15b59c2b71f53271c/spring-test-7.0.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/7.0.7/1f1d97e9692fd5a36c122d1bb56c75c36b30e8fc/spring-test-7.0.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/7.0.7/855ec3d866d759800dd4fdeb5a7796c6b4d3c574/spring-test-7.0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

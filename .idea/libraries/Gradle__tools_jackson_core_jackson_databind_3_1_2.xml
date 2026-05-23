@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: tools.jackson.core:jackson-databind:3.1.2" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="tools.jackson.core" artifactId="jackson-databind" version="3.1.2" baseVersion="3.1.2" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/tools.jackson.core/jackson-databind/3.1.2/2550e04829fc14566ddab7b9564ba886a9c6a532/jackson-databind-3.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/tools.jackson.core/jackson-databind/3.1.2/4a7e06ed48d147e60d5f9fab48e597e417b2ce40/jackson-databind-3.1.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/tools.jackson.core/jackson-databind/3.1.2/6a2dca509cd94137d3c5f49b1a653737fc789ca8/jackson-databind-3.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

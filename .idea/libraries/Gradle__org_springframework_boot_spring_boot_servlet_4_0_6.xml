@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-servlet:4.0.6" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-servlet" version="4.0.6" baseVersion="4.0.6" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-servlet/4.0.6/8a1d703662d560a7826c61a908f5307e795cb370/spring-boot-servlet-4.0.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-servlet/4.0.6/5d63d7902a45664b676aa9ba53d43093df056fdb/spring-boot-servlet-4.0.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-servlet/4.0.6/9a480cf94487b2ba1435853d3e7b7ae57798bc8e/spring-boot-servlet-4.0.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
