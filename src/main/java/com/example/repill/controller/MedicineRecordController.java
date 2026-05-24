@@ -1,21 +1,20 @@
 package com.example.repill.controller;
 
-import com.example.repill.dto.MedicineRecordResponse;
+import com.example.repill.dto.SaveMedicineRecordRequest;
 import com.example.repill.service.MedicineRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/medicine-records")
+@RequestMapping("/medicine-records")
 public class MedicineRecordController {
 
     private final MedicineRecordService medicineRecordService;
 
-    @GetMapping
-    public List<MedicineRecordResponse> getRecords() {
-        return medicineRecordService.getRecords();
+    @PostMapping
+    public String save(@RequestBody SaveMedicineRecordRequest request) {
+        medicineRecordService.saveRecords(request);
+        return "저장 완료";
     }
 }

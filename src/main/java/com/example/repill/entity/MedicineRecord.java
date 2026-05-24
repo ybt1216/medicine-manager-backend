@@ -1,15 +1,22 @@
 package com.example.repill.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.apache.catalina.User;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
-public class MedicineRecord {//DB 테이블과 직접 연결되는 객체
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class MedicineRecord {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,28 +24,25 @@ public class MedicineRecord {//DB 테이블과 직접 연결되는 객체
 
     private String imagePath;
 
-    @Column(length = 1000)
-    private String visibleText;
+    private String ocrName;
 
-    private String imprint;
-    private String color;
-    private String shape;
-    private String dosageForm;
-    private Boolean hasScoreLine;
+    private String officialName;
 
-    @Column(length = 1000)
-    private String packageText;
+    //@Lob
+    private String effect;
 
-    private String expirationDate;
-    private Double confidence;
+    //@Lob
+    private String usage;
 
-    @Column(length = 2000)
+    //@Lob
     private String caution;
 
-    private LocalDateTime createdAt;
+    //@Lob
+    private String storageMethod;
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
+    private Integer durationDays;
+
+    private LocalDate completedDate;
+
+    private Integer medicineCount;
 }

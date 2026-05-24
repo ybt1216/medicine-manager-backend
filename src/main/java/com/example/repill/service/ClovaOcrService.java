@@ -2,9 +2,13 @@ package com.example.repill.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import com.example.repill.dto.MedicineInfoDto;
 import com.example.repill.dto.OcrAnalyzeResponse;
+import com.example.repill.repository.MedicineRecordRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +24,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 @Service
+@RequiredArgsConstructor
 public class ClovaOcrService {
 
     @Value("${ocr.invoke-url}")
@@ -57,6 +62,23 @@ public class ClovaOcrService {
 
             String originalFilename = file.getOriginalFilename();
 
+            byte[] fileBytes = file.getBytes();
+
+            String uploadDir = "C:/uploads/";
+
+            File dir = new File(uploadDir);
+
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String savedFileName =
+                    UUID.randomUUID() + "_" + originalFilename;
+
+            File savedFile = new File(uploadDir + savedFileName);
+
+            file.transferTo(savedFile);
+
             String extension = originalFilename
                     .substring(originalFilename.lastIndexOf(".") + 1)
                     .toLowerCase();
@@ -90,7 +112,7 @@ public class ClovaOcrService {
 
             writer.flush();
 
-            outputStream.write(file.getBytes());
+            outputStream.write(fileBytes);
 
             outputStream.flush();
 
@@ -145,6 +167,8 @@ public class ClovaOcrService {
                 }
             }
 
+            String imagePath = "/uploads/" + savedFileName;
+
             String fullText = resultText.toString();
 
             String prescribedDate = extractDate(fullText);
@@ -153,19 +177,20 @@ public class ClovaOcrService {
 
             String completedDate = calculateCompletedDate(prescribedDate, durationDays);
 
-            List<String> medicineNames = extractMedicineNames(fullText);
+            List<MedicineInfoDto> medicines = new ArrayList<>();
 
-            List<String> cautions = extractCautions(fullText);
+            List<String> medicineNames = extractMedicineNames(fullText); //약 이름 추출
 
-            Integer medicineCount = medicineNames.size();
+            Integer medicineCount = medicines.size();
 
             return new OcrAnalyzeResponse(
                     fullText,
+                    imagePath,
                     medicineNames,
+                    medicines,
                     prescribedDate,
                     durationDays,
                     completedDate,
-                    cautions,
                     medicineCount
             );
 
@@ -174,11 +199,12 @@ public class ClovaOcrService {
 
             return new OcrAnalyzeResponse(
                     null,
+                    null,
+                    new ArrayList<>(),
                     new ArrayList<>(),
                     null,
                     null,
                     null,
-                    new ArrayList<>(),
                     0
             );
         }
@@ -209,16 +235,57 @@ public class ClovaOcrService {
     private List<String> extractMedicineNames(String text) {
         List<String> result = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile(
-                "[가-힣A-Za-z0-9*]+(정|캡슐|시럽|산|액|연고|크림|밀리그램|mg|MG)"
-        );
+        String[] lines = text.split("\\n");
 
-        Matcher matcher = pattern.matcher(text);
-
-        while (matcher.find()) {
-            String name = matcher.group()
+        for (String line : lines) {
+            String name = line.trim()
                     .replace("*", "")
+                    .replace("비)", "")
                     .trim();
+
+            if (name.isBlank()) continue;
+
+            // 약 이름 패턴
+            boolean looksLikeMedicine =
+                    name.contains("정")
+                            || name.contains("캡슐")
+                            || name.contains("mg")
+                            || name.contains("MG")
+                            || name.contains("밀리그램")
+                            || name.contains("밀리그람");
+
+            if (!looksLikeMedicine) continue;
+
+            // 성상/설명 제거
+            if (name.contains("흰색")) continue;
+            if (name.contains("황색")) continue;
+            if (name.contains("분홍색")) continue;
+            if (name.contains("연녹색")) continue;
+            if (name.contains("정제")) continue;
+            if (name.contains("경질캡슐")) continue;
+            if (name.contains("보관")) continue;
+            if (name.contains("주의")) continue;
+            if (name.contains("복용")) continue;
+            if (name.contains("감소")) continue;
+            if (name.contains("개선")) continue;
+            if (name.contains("완화")) continue;
+            if (name.contains("촉진")) continue;
+            if (name.contains("해소")) continue;
+            if (name.contains("억제")) continue;
+            if (name.contains("보호")) continue;
+
+            // 너무 짧은 일반 단어 제거
+            if (name.length() < 4) continue;
+            if (name.equals("서방정")) continue;
+            if (name.equals("안정")) continue;
+            if (name.equals("위산")) continue;
+
+            // 복약량/횟수/일수 문장 제거
+            if (name.matches(".*\\d+정씩.*")) continue;
+            if (name.matches(".*\\d+회.*")) continue;
+            if (name.matches(".*\\d+일분.*")) continue;
+            if (name.contains("씩")) continue;
+            if (name.contains("일분")) continue;
 
             if (!result.contains(name)) {
                 result.add(name);
@@ -240,34 +307,4 @@ public class ClovaOcrService {
 
         return date.plusDays(durationDays).toString();
     }
-    private List<String> extractCautions(String text) {
-        List<String> result = new ArrayList<>();
-
-        String[] lines = text.split("\\n");
-
-        for (String line : lines) {
-            String trimmed = line.trim();
-
-            if (trimmed.contains("주의")
-                    || trimmed.contains("마세요")
-                    || trimmed.contains("상의")
-                    || trimmed.contains("알리세요")
-                    || trimmed.contains("위장장애")
-                    || trimmed.contains("녹내장")
-                    || trimmed.contains("간질환")
-                    || trimmed.contains("신장질환")
-                    || trimmed.contains("음주")
-                    || trimmed.contains("흡연")
-                    || trimmed.contains("보관")) {
-
-                if (!result.contains(trimmed)) {
-                    result.add(trimmed);
-                }
-            }
-        }
-
-        return result;
-    }
-
-
 }

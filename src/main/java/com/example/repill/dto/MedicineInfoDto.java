@@ -1,17 +1,27 @@
 package com.example.repill.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class MedicineInfoDto {
-    private String name;
-    private String category;
+
+    // OCR로 읽은 약 이름
+    private String ocrName;
+
+    // 공공 API 공식 약 이름
+    private String officialName;
+
+    // 약효
     private String effect;
+
+    // 복용방법
+    private String usage;
+
+    // 주의사항
     private String caution;
+
+    // 보관방법
+    private String storageMethod;
 }
