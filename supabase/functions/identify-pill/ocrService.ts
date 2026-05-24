@@ -1,5 +1,15 @@
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer)
+  const chunkSize = 0x8000
+  let binary = ""
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize))
+  }
+  return btoa(binary)
+}
+
 export const ocrService = {
-  async extractOcrText(imageBase64: string): Promise<string> {
+  async extractOcrText(image: string | ArrayBuffer): Promise<string> {
     const clovaOcrUrl = Deno.env.get("CLOVA_OCR_URL") ?? ""
     const clovaOcrSecret = Deno.env.get("CLOVA_OCR_SECRET") ?? ""
 
@@ -7,7 +17,11 @@ export const ocrService = {
       throw new Error("CLOVA_OCR_URL or CLOVA_OCR_SECRET is not configured")
     }
 
-    const rawBase64 = imageBase64
+    const base64Data = typeof image === "string"
+      ? image
+      : arrayBufferToBase64(image)
+
+    const rawBase64 = base64Data
       .replace(/^data:image\/[a-zA-Z]+;base64,/, "")
       .trim()
 

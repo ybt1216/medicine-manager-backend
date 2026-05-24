@@ -13,8 +13,7 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") {
     return new Response(
       JSON.stringify({
-        success: false,
-        error: "Method not allowed. Use POST.",
+        medicineNames: [],
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -24,16 +23,13 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const body = await req.json()
-    const imageBase64 = typeof body.imageBase64 === "string" ? body.imageBase64 : ""
-    const color = typeof body.color === "string" ? body.color : ""
-    const shape = typeof body.shape === "string" ? body.shape : ""
+    const formData = await req.formData()
+    const file = formData.get("file")
 
-    if (!imageBase64) {
+    if (!file || !(file instanceof Blob) || file.size === 0) {
       return new Response(
         JSON.stringify({
-          success: false,
-          error: "Missing imageBase64 payload.",
+          medicineNames: [],
         }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -42,9 +38,13 @@ Deno.serve(async (req) => {
       )
     }
 
+    const imageBytes = await file.arrayBuffer()
+    const color = typeof formData.get("color") === "string" ? String(formData.get("color")) : ""
+    const shape = typeof formData.get("shape") === "string" ? String(formData.get("shape")) : ""
+
     let ocrText = ""
     try {
-      ocrText = await ocrService.extractOcrText(imageBase64)
+      ocrText = await ocrService.extractOcrText(imageBytes)
     } catch (error) {
       console.error("OCR extraction failed:", error)
       ocrText = ""
@@ -56,10 +56,15 @@ Deno.serve(async (req) => {
       shape,
     )
 
+    const medicineNames = Array.isArray(matchedPills)
+      ? matchedPills
+        .map((entry) => String(entry?.ITEM_NAME ?? "").trim())
+        .filter((name) => name.length > 0)
+      : []
+
     return new Response(
       JSON.stringify({
-        success: true,
-        data: matchedPills,
+        medicineNames,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -70,8 +75,7 @@ Deno.serve(async (req) => {
     console.error("Server error:", error)
     return new Response(
       JSON.stringify({
-        success: false,
-        error: error instanceof Error ? error.message : "Internal server error",
+        medicineNames: [],
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
