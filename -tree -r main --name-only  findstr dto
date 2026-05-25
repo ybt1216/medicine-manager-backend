@@ -1,0 +1,10 @@
+[33macfda4e[m[33m ([m[1;31morigin/img_analysis[m[33m, [m[1;32mimg_analysis[m[33m)[m Merge branch 'main' into img_analysis
+[33m8a8ae45[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Ignore temp files
+[33m4543b24[m Add Supabase edge function
+[33m4ab34cf[m feat: ocr 및 필터링, api검색
+[33mb80acf3[m feat: ocr 및 필터링, api검색
+[33m85b74da[m feat: OCR
+[33m68e7d93[m feat: OCR
+[33m486f571[m feat: 이미지파일 보내고 데이터 받기, 더미데이터 만듬 chore: API키 내부에 적음
+[33meb9b49c[m feat: 이미지파일 보내고 데이터 받기, 더미데이터 만듬 chore: API키 내부에 적음
+[33mcc16beb[m merge: .gitignore 충돌 해결
